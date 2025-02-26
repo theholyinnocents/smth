@@ -36,3 +36,8 @@ app.post("/messages", async (req, res) => {
 // Запуск сервера
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => console.log(`Сервер запущен на порту ${PORT}`));
+
+// message
+app.get('/messages', async (req, res) => {
+    res.json({ message: "I am" });
+});
