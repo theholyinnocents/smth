@@ -24,6 +24,7 @@ const Message = mongoose.model("Message", MessageSchema);
 // API: получить все сообщения
 app.get("/messages", async (req, res) => {
   const messages = await Message.find();
+  console.log(messages); // Логируем сообщения
   res.json(messages);
 });
 
@@ -37,15 +38,3 @@ app.post("/messages", async (req, res) => {
 // Запуск сервера
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => console.log(`Сервер запущен на порту ${PORT}`));
-
-// messages
-app.get('/messages', async (req, res) => {
-    res.json({ message: "I am" });
-});
-
-// console.log(messages)
-app.get("/messages", async (req, res) => {
-  const messages = await Message.find();
-  console.log(messages); // Логируем сообщения
-  res.json(messages);
-});
