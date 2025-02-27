@@ -80,3 +80,36 @@ app.post("/messages", async (req, res) => {
 // Запуск сервера
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => console.log(`🚀 Сервер запущен на порту ${PORT}`));
+
+// Код, который не прокатил с чудовищем
+import mongoose from "mongoose";
+import dotenv from "dotenv";
+
+dotenv.config();
+
+async function testMongoConnection() {
+  try {
+    await mongoose.connect(process.env.MONGO_URL, {
+      useNewUrlParser: true,
+      useUnifiedTopology: true,
+      serverSelectionTimeoutMS: 5000, // 5 секунд на подключение
+    });
+
+    console.log("✅ Успешное подключение к MongoDB!");
+
+    // Создаём тестовую запись в базе
+    const TestSchema = new mongoose.Schema({ message: String });
+    const TestModel = mongoose.model("Test", TestSchema);
+
+    const testEntry = new TestModel({ message: "Привет, MongoDB!" });
+    await testEntry.save();
+
+    console.log("📌 Данные успешно записаны в базу!");
+
+    mongoose.connection.close();
+  } catch (error) {
+    console.error("❌ Ошибка подключения к MongoDB:", error);
+  }
+}
+
+testMongoConnection();
