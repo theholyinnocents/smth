@@ -8,17 +8,24 @@ const app = express();
 app.use(express.json());
 app.use(express.static("public"));
 
+// Логируем переменные окружения перед подключением
+console.log("🔍 MONGO_URL:", process.env.MONGO_URL);
+console.log("🔍 PORT:", process.env.PORT);
+
 // Подключаемся к MongoDB
 async function connectToMongo() {
   try {
     await mongoose.connect(process.env.MONGO_URL, {
       useNewUrlParser: true,
       useUnifiedTopology: true,
+      serverSelectionTimeoutMS: 5000, // 5 секунд на подключение
+      connectTimeoutMS: 10000, // 10 секунд на установку соединения
+      dbName: "aion-db", // Явно указываем базу
     });
     console.log("✅ MongoDB подключен!");
   } catch (error) {
     console.error("❌ Ошибка подключения к MongoDB:", error);
-    process.exit(1); // Если не подключится, процесс остановится
+    process.exit(1); // Остановка процесса при ошибке
   }
 }
 
@@ -30,12 +37,16 @@ const Message = mongoose.model("Message", MessageSchema);
 
 // Проверяем и создаем коллекцию, если пустая
 async function ensureCollectionExists() {
-  const count = await Message.countDocuments();
-  if (count === 0) {
-    await Message.create({ text: "Привет, я тестовое сообщение!" });
-    console.log("📌 Тестовое сообщение добавлено в базу.");
-  } else {
-    console.log("✅ Коллекция уже существует, данные есть.");
+  try {
+    const count = await Message.countDocuments();
+    if (count === 0) {
+      await Message.create({ text: "Привет, я тестовое сообщение!" });
+      console.log("📌 Тестовое сообщение добавлено в базу.");
+    } else {
+      console.log("✅ Коллекция уже существует, данные есть.");
+    }
+  } catch (err) {
+    console.error("❌ Ошибка при создании коллекции:", err);
   }
 }
 
@@ -48,7 +59,7 @@ app.get("/messages", async (req, res) => {
     console.log("📨 Отправлены сообщения:", messages);
     res.json(messages);
   } catch (err) {
-    console.error("Ошибка при получении сообщений:", err);
+    console.error("❌ Ошибка при получении сообщений:", err);
     res.status(500).json({ error: "Ошибка сервера" });
   }
 });
@@ -61,7 +72,7 @@ app.post("/messages", async (req, res) => {
     console.log("🆕 Добавлено сообщение:", newMessage);
     res.json(newMessage);
   } catch (err) {
-    console.error("Ошибка при создании сообщения:", err);
+    console.error("❌ Ошибка при создании сообщения:", err);
     res.status(500).json({ error: "Ошибка сервера" });
   }
 });
