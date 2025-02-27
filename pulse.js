@@ -82,10 +82,6 @@ const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => console.log(`🚀 Сервер запущен на порту ${PORT}`));
 
 // Код, который не прокатил с чудовищем
-import dotenv from "dotenv";
-
-dotenv.config();
-
 async function testMongoConnection() {
   try {
     await mongoose.connect(process.env.MONGO_URL, {
