@@ -38,3 +38,19 @@ app.post("/messages", async (req, res) => {
 // Запуск сервера
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => console.log(`Сервер запущен на порту ${PORT}`));
+
+const mongoose = require("mongoose");
+
+const messageSchema = new mongoose.Schema({
+  text: String,
+});
+
+const Message = mongoose.model("Message", messageSchema);
+
+// Принудительное создание базы
+async function initDB() {
+  await Message.createCollection();
+  console.log("Коллекция создана");
+}
+
+initDB();
