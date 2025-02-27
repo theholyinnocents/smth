@@ -108,3 +108,7 @@ async function testMongoConnection() {
 }
 
 testMongoConnection();
+
+git add package.json package-lock.json
+git commit -m "Добавлен package.json"
+git push origin main
