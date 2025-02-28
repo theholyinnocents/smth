@@ -1,11 +1,10 @@
-const mongoose = require('mongoose');
+import mongoose from "mongoose";
 
 mongoose.connect(process.env.MONGO_URL)
   .then(() => console.log('✅ Успешное подключение к MongoDB!'))
   .catch(err => console.log('❌ Ошибка подключения к MongoDB:', err));
 
 import express from "express";
-import mongoose from "mongoose";
 import dotenv from "dotenv";
 
 dotenv.config();
