@@ -37,8 +37,15 @@ async function connectToMongo() {
 await connectToMongo(); // Подключаемся к базе перед запуском сервера
 
 // Создаём модель сообщений
-const MessageSchema = new mongoose.Schema({ text: String });
+const messageSchema = new mongoose.Schema({
+    text: String,
+    createdAt: { type: Date, default: Date.now }
+});
+
 const Message = mongoose.model('aion-collection', messageSchema);
+
+module.exports = Message;
+
 
 // Проверяем и создаем коллекцию, если пустая
 async function ensureCollectionExists() {
