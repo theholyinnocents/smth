@@ -42,7 +42,7 @@ const messageSchema = new mongoose.Schema({
     createdAt: { type: Date, default: Date.now }
 });
 
-const Message = mongoose.model('aion-collection', messageSchema);
+const Message = mongoose.model('aion-messages', messageSchema);
 
 export default Message;
 
