@@ -44,7 +44,7 @@ const messageSchema = new mongoose.Schema({
 
 const Message = mongoose.model('aion-collection', messageSchema);
 
-module.exports = Message;
+export default Message;
 
 
 // Проверяем и создаем коллекцию, если пустая
